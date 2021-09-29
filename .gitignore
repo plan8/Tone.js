@@ -20,9 +20,6 @@ test/Main.js
 test/supports.html
 coverage/
 
-build/*
-dist/*
-
 examples/scratch.js
 examples/scratch.ts
 Tone/version.js
