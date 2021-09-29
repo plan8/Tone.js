@@ -1,3 +1,2 @@
-// eslint-disable-next-line @typescript-eslint/no-inferrable-types
-export const version = "dev";
+export const version = "14.7.77";
 //# sourceMappingURL=version.js.map

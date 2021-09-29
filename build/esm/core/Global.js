@@ -64,6 +64,6 @@ if (theWindow && !theWindow.TONE_SILENCE_LOGGING) {
     }
     const printString = ` * Tone.js ${prefix}${version} * `;
     // eslint-disable-next-line no-console
-    console.log(`%c${printString}`, "background: #000; color: #fff");
+    // console.log(`%c${printString}`, "background: #000; color: #fff");
 }
 //# sourceMappingURL=Global.js.map
