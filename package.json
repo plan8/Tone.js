@@ -102,7 +102,7 @@
 		"yargs": "^13.2.0"
 	},
 	"dependencies": {
-		"standardized-audio-context": "plan8/standardized-audio-context#feature/noDisconnect",
+		"standardized-audio-context": "^25.1.8",
 		"tslib": "^2.0.1"
 	},
 	"prettier": {
