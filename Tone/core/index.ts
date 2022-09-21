@@ -7,14 +7,14 @@ export * from "./context/Delay";
 // export * from "./context/Destination";
 export * from "./context/Gain";
 export * from "./context/Offline";
-export * from "./context/OfflineContext";
+// export * from "./context/OfflineContext";
 export * from "./context/Param";
 export * from "./context/ToneAudioBuffer";
 export * from "./context/ToneAudioBuffers";
 export * from "./context/ToneAudioNode";
 
 export * from "./type/Frequency";
-export * from "./type/Midi";
+// export * from "./type/Midi";
 export * from "./type/Time";
 export * from "./type/Ticks";
 export * from "./type/TransportTime";

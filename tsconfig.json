@@ -24,5 +24,8 @@
 	"include": [
 		"Tone/**/*.ts",
 		"test/**/*.ts"
-	]
+	],
+	"exclude": [
+		"Tone/**/*.test.ts"
+  ]
 }

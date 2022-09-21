@@ -4,7 +4,7 @@ import { Context } from "./core/context/Context";
 import { Listener } from "./core/context/Listener";
 import { Destination } from "./core/context/Destination";
 import { FrequencyClass } from "./core/type/Frequency";
-import { MidiClass } from "./core/type/Midi";
+// import { MidiClass } from "./core/type/Midi";
 import { TicksClass } from "./core/type/Ticks";
 import { TimeClass } from "./core/type/Time";
 import { TransportTimeClass } from "./core/type/TransportTime";
@@ -66,7 +66,7 @@ export function fromContext(context: Context): Tone {
 		Draw: context.draw,
 		context,
 		// the type functions
-		Midi: bindTypeClass(context, MidiClass),
+		// Midi: bindTypeClass(context, MidiClass),
 		Time: bindTypeClass(context, TimeClass),
 		Frequency: bindTypeClass(context, FrequencyClass),
 		Ticks: bindTypeClass(context, TicksClass),
