@@ -12,6 +12,6 @@ export * from "./Signal";
 // export * from "./ScaleExp";
 // export * from "./Subtract";
 // export * from "./SyncedSignal";
-export * from "./WaveShaper";
+// export * from "./WaveShaper";
 // export * from "./Zero";
 //# sourceMappingURL=index.js.map
