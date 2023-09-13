@@ -24,6 +24,7 @@ export interface SamplerOptions extends InstrumentOptions {
 	baseUrl: string;
 	curve: ToneBufferSourceCurve;
 	urls: SamplesMap;
+	loop?: boolean;
 }
 
 /**
@@ -83,6 +84,8 @@ export class Sampler extends Instrument<SamplerOptions> {
 	 */
 	curve: ToneBufferSourceCurve;
 
+	loop: boolean;
+
 	/**
 	 * @param samples An object of samples mapping either Midi Note Numbers or
 	 * 			Scientific Pitch Notation to the url of that sample.
@@ -126,6 +129,7 @@ export class Sampler extends Instrument<SamplerOptions> {
 		this.attack = options.attack;
 		this.release = options.release;
 		this.curve = options.curve;
+		this.loop = options.loop || false;
 
 		// invoke the callback if it's already loaded
 		if (this._buffers.loaded) {
@@ -143,6 +147,7 @@ export class Sampler extends Instrument<SamplerOptions> {
 			onerror: noOp,
 			release: 0.1,
 			urls: {},
+			loop: false,
 		});
 	}
 
@@ -193,6 +198,10 @@ export class Sampler extends Instrument<SamplerOptions> {
 				fadeOut: this.release,
 				playbackRate,
 			}).connect(this.output);
+
+			if (this.loop) {
+				source.loop = true;
+			}
 			source.start(time, 0, buffer.duration / playbackRate, velocity);
 			// add it to the active sources
 			if (!isArray(this._activeSources.get(midi))) {
