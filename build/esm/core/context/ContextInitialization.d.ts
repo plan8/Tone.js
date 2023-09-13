@@ -1,4 +1,4 @@
-declare type Context = import("./Context").Context;
+type Context = import("./Context").Context;
 /**
  * Used internally to setup a new Context
  */

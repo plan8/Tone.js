@@ -5,7 +5,7 @@ import { BasicPlaybackState } from "../../core/util/StateTimeline";
 import { Signal } from "../../signal/Signal";
 import { ToneOscillatorType } from "./Oscillator";
 import { ToneOscillatorOptions } from "./OscillatorInterface";
-export declare type LFOOptions = {
+export type LFOOptions = {
     min: number;
     max: number;
     amplitude: NormalRange;

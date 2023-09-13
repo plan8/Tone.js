@@ -1,7 +1,7 @@
 import { TimeClass } from "./Time";
 import { TimeBaseUnit, TimeExpression, TimeValue } from "./TimeBase";
 import { Frequency, Hertz, Interval, MidiNote, Note, Seconds, Ticks } from "./Units";
-export declare type FrequencyUnit = TimeBaseUnit | "midi";
+export type FrequencyUnit = TimeBaseUnit | "midi";
 /**
  * Frequency is a primitive type for encoding Frequency values.
  * Eventually all time values are evaluated to hertz using the `valueOf` method.

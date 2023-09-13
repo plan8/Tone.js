@@ -14,6 +14,7 @@ export interface SamplerOptions extends InstrumentOptions {
     baseUrl: string;
     curve: ToneBufferSourceCurve;
     urls: SamplesMap;
+    loop?: boolean;
 }
 /**
  * Pass in an object which maps the note's pitch or midi value to the url,
@@ -63,6 +64,7 @@ export declare class Sampler extends Instrument<SamplerOptions> {
      * Either "linear" or "exponential"
      */
     curve: ToneBufferSourceCurve;
+    loop: boolean;
     /**
      * @param samples An object of samples mapping either Midi Note Numbers or
      * 			Scientific Pitch Notation to the url of that sample.
