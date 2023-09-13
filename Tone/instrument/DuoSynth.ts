@@ -140,6 +140,7 @@ export class DuoSynth extends Monophonic<DuoSynthOptions> {
 	}
 
 	static getDefaults(): DuoSynthOptions {
+		// @ts-ignore
 		return deepMerge(Monophonic.getDefaults(), {
 			vibratoAmount: 0.5,
 			vibratoRate: 5,
