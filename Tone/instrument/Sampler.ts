@@ -202,7 +202,7 @@ export class Sampler extends Instrument<SamplerOptions> {
 			if (this.loop) {
 				source.loop = true;
 			}
-			source.start(time, 0, buffer.duration / playbackRate, velocity);
+			source.start(time, 0, this.loop ? undefined : buffer.duration / playbackRate, velocity);
 			// add it to the active sources
 			if (!isArray(this._activeSources.get(midi))) {
 				this._activeSources.set(midi, []);
