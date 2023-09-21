@@ -25,6 +25,8 @@ export interface SamplerOptions extends InstrumentOptions {
 	curve: ToneBufferSourceCurve;
 	urls: SamplesMap;
 	loop?: boolean;
+	loopStart?: Time;
+	loopEnd?: Time;
 }
 
 /**
@@ -86,6 +88,9 @@ export class Sampler extends Instrument<SamplerOptions> {
 
 	loop: boolean;
 
+	loopStart: Time;
+	loopEnd: Time | undefined;
+
 	/**
 	 * @param samples An object of samples mapping either Midi Note Numbers or
 	 * 			Scientific Pitch Notation to the url of that sample.
@@ -130,6 +135,8 @@ export class Sampler extends Instrument<SamplerOptions> {
 		this.release = options.release;
 		this.curve = options.curve;
 		this.loop = options.loop || false;
+		this.loopStart = options.loopStart || 0;
+		this.loopEnd = options.loopEnd;
 
 		// invoke the callback if it's already loaded
 		if (this._buffers.loaded) {
@@ -148,6 +155,8 @@ export class Sampler extends Instrument<SamplerOptions> {
 			release: 0.1,
 			urls: {},
 			loop: false,
+			loopStart: 0,
+			loopEnd: undefined,
 		});
 	}
 
@@ -201,6 +210,10 @@ export class Sampler extends Instrument<SamplerOptions> {
 
 			if (this.loop) {
 				source.loop = true;
+				source.loopStart = this.loopStart;
+				if (this.loopEnd !== undefined) {
+					source.loopEnd = this.loopEnd;
+				}
 			}
 			source.start(time, 0, this.loop ? undefined : buffer.duration / playbackRate, velocity);
 			// add it to the active sources
