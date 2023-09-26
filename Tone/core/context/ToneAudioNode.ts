@@ -27,6 +27,7 @@ export abstract class ToneAudioNode<Options extends ToneAudioNodeOptions = ToneA
 	/**
 	 * The name of the class
 	 */
+	//@ts-ignore
 	abstract readonly name: string = "ToneAudioNode";
 
 	/**

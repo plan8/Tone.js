@@ -1,13 +1,13 @@
 import { Seconds } from "../type/Units";
 import { Emitter } from "../util/Emitter";
 import { AnyAudioContext } from "./AudioContext";
-declare type Draw = import("../util/Draw").Draw;
-declare type Destination = import("./Destination").Destination;
-declare type Transport = import("../clock/Transport").Transport;
-declare type Listener = import("./Listener").Listener;
-export declare type ExcludedFromBaseAudioContext = "onstatechange" | "addEventListener" | "removeEventListener" | "listener" | "dispatchEvent" | "audioWorklet" | "destination" | "createScriptProcessor";
-export declare type BaseAudioContextSubset = Omit<BaseAudioContext, ExcludedFromBaseAudioContext>;
-export declare type ContextLatencyHint = AudioContextLatencyCategory;
+type Draw = import("../util/Draw").Draw;
+type Destination = import("./Destination").Destination;
+type Transport = import("../clock/Transport").Transport;
+type Listener = import("./Listener").Listener;
+export type ExcludedFromBaseAudioContext = "onstatechange" | "addEventListener" | "removeEventListener" | "listener" | "dispatchEvent" | "audioWorklet" | "destination" | "createScriptProcessor";
+export type BaseAudioContextSubset = Omit<BaseAudioContext, ExcludedFromBaseAudioContext>;
+export type ContextLatencyHint = AudioContextLatencyCategory;
 export declare abstract class BaseContext extends Emitter<"statechange" | "tick"> implements BaseAudioContextSubset {
     abstract createAnalyser(): AnalyserNode;
     abstract createOscillator(): OscillatorNode;

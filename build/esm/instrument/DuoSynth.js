@@ -71,6 +71,7 @@ export class DuoSynth extends Monophonic {
         return this.voice0.envelope.getValueAtTime(time) + this.voice1.envelope.getValueAtTime(time);
     }
     static getDefaults() {
+        //@ts-ignore
         return deepMerge(Monophonic.getDefaults(), {
             vibratoAmount: 0.5,
             vibratoRate: 5,

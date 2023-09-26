@@ -8,15 +8,15 @@ import { MonoSynth, MonoSynthOptions } from "./MonoSynth";
 import { MetalSynth, MetalSynthOptions } from "./MetalSynth";
 import { Monophonic } from "./Monophonic";
 import { Synth, SynthOptions } from "./Synth";
-declare type VoiceConstructor<V> = {
+type VoiceConstructor<V> = {
     getDefaults: () => VoiceOptions<V>;
 } & (new (...args: any[]) => V);
-declare type OmitMonophonicOptions<T> = Omit<T, "context" | "onsilence">;
-declare type VoiceOptions<T> = T extends MembraneSynth ? MembraneSynthOptions : T extends MetalSynth ? MetalSynthOptions : T extends FMSynth ? FMSynthOptions : T extends MonoSynth ? MonoSynthOptions : T extends AMSynth ? AMSynthOptions : T extends Synth ? SynthOptions : never;
+type OmitMonophonicOptions<T> = Omit<T, "context" | "onsilence">;
+type VoiceOptions<T> = T extends MembraneSynth ? MembraneSynthOptions : T extends MetalSynth ? MetalSynthOptions : T extends FMSynth ? FMSynthOptions : T extends MonoSynth ? MonoSynthOptions : T extends AMSynth ? AMSynthOptions : T extends Synth ? SynthOptions : never;
 /**
  * The settable synth options. excludes monophonic options.
  */
-declare type PartialVoiceOptions<T> = RecursivePartial<OmitMonophonicOptions<VoiceOptions<T>>>;
+type PartialVoiceOptions<T> = RecursivePartial<OmitMonophonicOptions<VoiceOptions<T>>>;
 export interface PolySynthOptions<Voice> extends InstrumentOptions {
     maxPolyphony: number;
     voice: VoiceConstructor<Voice>;
