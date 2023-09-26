@@ -103,7 +103,7 @@ export abstract class BaseContext
 	): AudioWorkletNode;
 
 	abstract get rawContext(): AnyAudioContext;
-
+	//@ts-ignore
 	abstract async addAudioWorkletModule(
 		_url: string,
 		_name: string
