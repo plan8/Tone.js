@@ -2,10 +2,10 @@ import { TickerClockSource } from "../clock/Ticker";
 import { Seconds } from "../type/Units";
 import { AnyAudioContext } from "./AudioContext";
 import { BaseContext, ContextLatencyHint } from "./BaseContext";
-declare type Transport = import("../clock/Transport").Transport;
-declare type Destination = import("./Destination").Destination;
-declare type Listener = import("./Listener").Listener;
-declare type Draw = import("../util/Draw").Draw;
+type Transport = import("../clock/Transport").Transport;
+type Destination = import("./Destination").Destination;
+type Listener = import("./Listener").Listener;
+type Draw = import("../util/Draw").Draw;
 export interface ContextOptions {
     clockSource: TickerClockSource;
     latencyHint: ContextLatencyHint;

@@ -3,8 +3,8 @@ import { ToneAudioNode } from "../../core/context/ToneAudioNode";
 import { Frequency } from "../../core/type/Units";
 import { Signal } from "../../signal/Signal";
 import { BiquadFilterOptions } from "./BiquadFilter";
-export declare type FilterRollOff = -12 | -24 | -48 | -96;
-export declare type FilterOptions = BiquadFilterOptions & {
+export type FilterRollOff = -12 | -24 | -48 | -96;
+export type FilterOptions = BiquadFilterOptions & {
     rolloff: FilterRollOff;
 };
 /**

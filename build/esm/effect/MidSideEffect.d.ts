@@ -1,6 +1,6 @@
 import { Effect, EffectOptions } from "./Effect";
 import { OutputNode, ToneAudioNode } from "../core/context/ToneAudioNode";
-export declare type MidSideEffectOptions = EffectOptions;
+export type MidSideEffectOptions = EffectOptions;
 /**
  * Mid/Side processing separates the the 'mid' signal
  * (which comes out of both the left and the right channel)

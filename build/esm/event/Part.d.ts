@@ -2,7 +2,7 @@ import { TransportTimeClass } from "../core/type/TransportTime";
 import { NormalRange, Positive, Seconds, Ticks, Time, TransportTime } from "../core/type/Units";
 import { StateTimeline } from "../core/util/StateTimeline";
 import { ToneEvent, ToneEventCallback, ToneEventOptions } from "./ToneEvent";
-declare type CallbackType<T> = T extends {
+type CallbackType<T> = T extends {
     time: Time;
     [key: string]: any;
 } ? T : T extends ArrayLike<any> ? T[1] : T extends Time ? null : never;

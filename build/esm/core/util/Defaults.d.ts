@@ -1,4 +1,4 @@
-declare type BaseToneOptions = import("../Tone").BaseToneOptions;
+type BaseToneOptions = import("../Tone").BaseToneOptions;
 /**
  * Recursively merge an object
  * @param target the object to merge into
