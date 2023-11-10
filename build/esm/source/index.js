@@ -12,5 +12,5 @@ export * from "./oscillator/LFO";
 export * from "./buffer/ToneBufferSource";
 export * from "./buffer/Player";
 // export * from "./buffer/Players";
-// export * from "./buffer/GrainPlayer";
+export * from "./buffer/GrainPlayer";
 //# sourceMappingURL=index.js.map

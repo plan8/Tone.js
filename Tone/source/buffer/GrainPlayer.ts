@@ -20,6 +20,7 @@ interface GrainPlayerOptions extends SourceOptions {
 	loop: boolean;
 	loopStart: Time;
 	loopEnd: Time;
+	randomness?: number;
 }
 
 /**
@@ -74,6 +75,11 @@ export class GrainPlayer extends Source<GrainPlayerOptions> {
 	private _overlap: Seconds;
 
 	/**
+	 * 0-1 default 0. Controls how much the grains are randomly shuffled. andreasplan8
+	 */
+	private _randomness: number;
+
+	/**
 	 * Adjust the pitch independently of the playbackRate.
 	 */
 	detune: Cents;
@@ -118,6 +124,9 @@ export class GrainPlayer extends Source<GrainPlayerOptions> {
 		this.loopStart = options.loopStart;
 		this.loopEnd = options.loopEnd;
 		this.reverse = options.reverse;
+		
+		this._randomness = options.randomness || 0;
+		
 		this._clock.on("stop", this._onstop.bind(this));
 	}
 
@@ -194,7 +203,12 @@ export class GrainPlayer extends Source<GrainPlayerOptions> {
 	private _tick(time: Seconds): void {
 		// check if it should stop looping
 		const ticks = this._clock.getTicksAtTime(time);
-		const offset = ticks * this._grainSize;
+		let offset = ticks * this._grainSize;
+
+		if (Math.random() < this._randomness) {
+			offset = ((this.buffer.duration / this._grainSize) * Math.random()) * this._grainSize;
+		}
+
 		this.log("offset", offset);
 
 		if (!this.loop && offset > this.buffer.duration) {
@@ -218,7 +232,7 @@ export class GrainPlayer extends Source<GrainPlayerOptions> {
 			playbackRate: intervalToFrequencyRatio(this.detune / 100)
 		}).connect(this.output);
 
-		source.start(time, this._grainSize * ticks);
+		source.start(time, offset);
 		source.stop(time + this._grainSize / this.playbackRate);
 
 		// add it to the active sources
@@ -291,6 +305,13 @@ export class GrainPlayer extends Source<GrainPlayerOptions> {
 	set grainSize(size) {
 		this._grainSize = this.toSeconds(size);
 		this._clock.frequency.setValueAtTime(this._playbackRate / this._grainSize, this.now());
+	}
+
+	get randomness(): number {
+		return this._randomness;
+	}
+	set randomness(value: number) {
+		this._randomness = value;
 	}
 
 	/**

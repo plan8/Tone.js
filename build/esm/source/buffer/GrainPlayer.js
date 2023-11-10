@@ -53,6 +53,7 @@ export class GrainPlayer extends Source {
         this.loopStart = options.loopStart;
         this.loopEnd = options.loopEnd;
         this.reverse = options.reverse;
+        this._randomness = options.randomness || 0;
         this._clock.on("stop", this._onstop.bind(this));
     }
     static getDefaults() {
@@ -120,7 +121,10 @@ export class GrainPlayer extends Source {
     _tick(time) {
         // check if it should stop looping
         const ticks = this._clock.getTicksAtTime(time);
-        const offset = ticks * this._grainSize;
+        let offset = ticks * this._grainSize;
+        if (Math.random() < this._randomness) {
+            offset = ((this.buffer.duration / this._grainSize) * Math.random()) * this._grainSize;
+        }
         this.log("offset", offset);
         if (!this.loop && offset > this.buffer.duration) {
             this.stop(time);
@@ -140,7 +144,7 @@ export class GrainPlayer extends Source {
             // compute the playbackRate based on the detune
             playbackRate: intervalToFrequencyRatio(this.detune / 100)
         }).connect(this.output);
-        source.start(time, this._grainSize * ticks);
+        source.start(time, offset);
         source.stop(time + this._grainSize / this.playbackRate);
         // add it to the active sources
         this._activeSources.push(source);
@@ -206,6 +210,12 @@ export class GrainPlayer extends Source {
     set grainSize(size) {
         this._grainSize = this.toSeconds(size);
         this._clock.frequency.setValueAtTime(this._playbackRate / this._grainSize, this.now());
+    }
+    get randomness() {
+        return this._randomness;
+    }
+    set randomness(value) {
+        this._randomness = value;
     }
     /**
      * The duration of the cross-fade between successive grains.
