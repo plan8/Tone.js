@@ -14,6 +14,7 @@ interface GrainPlayerOptions extends SourceOptions {
     loopStart: Time;
     loopEnd: Time;
     randomness?: number;
+    skipModulo?: number;
 }
 /**
  * GrainPlayer implements [granular synthesis](https://en.wikipedia.org/wiki/Granular_synthesis).
@@ -56,7 +57,14 @@ export declare class GrainPlayer extends Source<GrainPlayerOptions> {
      * Internal overlap reference;
      */
     private _overlap;
+    /**
+     * 0-1 default 0. Controls how much the grains are randomly shuffled. andreasplan8
+     */
     private _randomness;
+    /**
+     * Use this to skip some ticks in the buffer
+     */
+    private _skipModulo;
     /**
      * Adjust the pitch independently of the playbackRate.
      */
@@ -125,6 +133,8 @@ export declare class GrainPlayer extends Source<GrainPlayerOptions> {
     set grainSize(size: Time);
     get randomness(): number;
     set randomness(value: number);
+    get skipModulo(): number;
+    set skipModulo(value: number);
     /**
      * The duration of the cross-fade between successive grains.
      */

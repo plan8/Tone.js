@@ -54,6 +54,7 @@ export class GrainPlayer extends Source {
         this.loopEnd = options.loopEnd;
         this.reverse = options.reverse;
         this._randomness = options.randomness || 0;
+        this._skipModulo = options.skipModulo || 0;
         this._clock.on("stop", this._onstop.bind(this));
     }
     static getDefaults() {
@@ -128,6 +129,9 @@ export class GrainPlayer extends Source {
         this.log("offset", offset);
         if (!this.loop && offset > this.buffer.duration) {
             this.stop(time);
+            return;
+        }
+        if (this._skipModulo && Math.round(ticks) % this._skipModulo !== 0) {
             return;
         }
         // at the beginning of the file, the fade in should be 0
@@ -216,6 +220,12 @@ export class GrainPlayer extends Source {
     }
     set randomness(value) {
         this._randomness = value;
+    }
+    get skipModulo() {
+        return this._skipModulo;
+    }
+    set skipModulo(value) {
+        this._skipModulo = value;
     }
     /**
      * The duration of the cross-fade between successive grains.

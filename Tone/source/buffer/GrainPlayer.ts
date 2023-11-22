@@ -21,6 +21,7 @@ interface GrainPlayerOptions extends SourceOptions {
 	loopStart: Time;
 	loopEnd: Time;
 	randomness?: number;
+	skipModulo?: number;
 }
 
 /**
@@ -80,6 +81,11 @@ export class GrainPlayer extends Source<GrainPlayerOptions> {
 	private _randomness: number;
 
 	/**
+	 * Use this to skip some ticks in the buffer
+	 */
+	private _skipModulo: number;
+
+	/**
 	 * Adjust the pitch independently of the playbackRate.
 	 */
 	detune: Cents;
@@ -126,6 +132,7 @@ export class GrainPlayer extends Source<GrainPlayerOptions> {
 		this.reverse = options.reverse;
 		
 		this._randomness = options.randomness || 0;
+		this._skipModulo = options.skipModulo || 0;
 		
 		this._clock.on("stop", this._onstop.bind(this));
 	}
@@ -213,6 +220,10 @@ export class GrainPlayer extends Source<GrainPlayerOptions> {
 
 		if (!this.loop && offset > this.buffer.duration) {
 			this.stop(time);
+			return;
+		}
+
+		if (this._skipModulo && Math.round(ticks) % this._skipModulo !== 0) {
 			return;
 		}
 
@@ -312,6 +323,13 @@ export class GrainPlayer extends Source<GrainPlayerOptions> {
 	}
 	set randomness(value: number) {
 		this._randomness = value;
+	}
+
+	get skipModulo(): number {
+		return this._skipModulo;
+	}
+	set skipModulo(value: number) {
+		this._skipModulo = value;
 	}
 
 	/**
