@@ -7,7 +7,7 @@ export * from "./analysis/Analyser";
 
 export * from "./channel/Channel";
 // export * from "./channel/CrossFade";
-// export * from "./channel/Merge";
+export * from "./channel/Merge";
 // export * from "./channel/MidSideMerge";
 // export * from "./channel/MidSideSplit";
 // export * from "./channel/Mono";
@@ -17,7 +17,7 @@ export * from "./channel/Panner3D";
 export * from "./channel/PanVol";
 // export * from "./channel/Recorder";
 // export * from "./channel/Solo";
-// export * from "./channel/Split";
+export * from "./channel/Split";
 // export * from "./channel/Volume";
 
 // export * from "./dynamics/Compressor";
