@@ -3,7 +3,7 @@ import { ToneWithContext, ToneWithContextOptions } from "../core/context/ToneWit
 import { TransportTimeClass } from "../core/type/TransportTime";
 import { NormalRange, Positive, Seconds, Ticks, Time, TransportTime } from "../core/type/Units";
 import { BasicPlaybackState, StateTimeline } from "../core/util/StateTimeline";
-export type ToneEventCallback<T> = (time: Seconds, value: T) => void;
+export declare type ToneEventCallback<T> = (time: Seconds, value: T) => void;
 export interface ToneEventOptions<T> extends ToneWithContextOptions {
     callback: ToneEventCallback<T>;
     loop: boolean | number;

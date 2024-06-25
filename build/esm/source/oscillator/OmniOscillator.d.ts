@@ -12,7 +12,7 @@ export { OmniOscillatorOptions } from "./OscillatorInterface";
 /**
  * All of the oscillator types that OmniOscillator can take on
  */
-type AnyOscillator = Oscillator | PWMOscillator | PulseOscillator | FatOscillator | AMOscillator | FMOscillator;
+declare type AnyOscillator = Oscillator | PWMOscillator | PulseOscillator | FatOscillator | AMOscillator | FMOscillator;
 /**
  * All of the Oscillator constructor types mapped to their name.
  */
@@ -27,12 +27,12 @@ interface OmniOscillatorSource {
 /**
  * The available oscillator types.
  */
-export type OmniOscSourceType = keyof OmniOscillatorSource;
-type IsAmOrFmOscillator<Osc, Ret> = Osc extends AMOscillator ? Ret : Osc extends FMOscillator ? Ret : undefined;
-type IsFatOscillator<Osc, Ret> = Osc extends FatOscillator ? Ret : undefined;
-type IsPWMOscillator<Osc, Ret> = Osc extends PWMOscillator ? Ret : undefined;
-type IsPulseOscillator<Osc, Ret> = Osc extends PulseOscillator ? Ret : undefined;
-type IsFMOscillator<Osc, Ret> = Osc extends FMOscillator ? Ret : undefined;
+export declare type OmniOscSourceType = keyof OmniOscillatorSource;
+declare type IsAmOrFmOscillator<Osc, Ret> = Osc extends AMOscillator ? Ret : Osc extends FMOscillator ? Ret : undefined;
+declare type IsFatOscillator<Osc, Ret> = Osc extends FatOscillator ? Ret : undefined;
+declare type IsPWMOscillator<Osc, Ret> = Osc extends PWMOscillator ? Ret : undefined;
+declare type IsPulseOscillator<Osc, Ret> = Osc extends PulseOscillator ? Ret : undefined;
+declare type IsFMOscillator<Osc, Ret> = Osc extends FMOscillator ? Ret : undefined;
 /**
  * OmniOscillator aggregates all of the oscillator types into one.
  * @example

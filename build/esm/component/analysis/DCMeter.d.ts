@@ -1,5 +1,5 @@
 import { MeterBase, MeterBaseOptions } from "./MeterBase";
-export type DCMeterOptions = MeterBaseOptions;
+export declare type DCMeterOptions = MeterBaseOptions;
 /**
  * DCMeter gets the raw value of the input signal at the current time.
  *

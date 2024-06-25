@@ -1,6 +1,6 @@
 import { SignalOperator, SignalOperatorOptions } from "./SignalOperator";
 import { ToneAudioNode } from "../core/context/ToneAudioNode";
-export type GreaterThanZeroOptions = SignalOperatorOptions;
+export declare type GreaterThanZeroOptions = SignalOperatorOptions;
 /**
  * GreaterThanZero outputs 1 when the input is strictly greater than zero
  * @example

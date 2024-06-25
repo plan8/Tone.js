@@ -1,6 +1,6 @@
 import { ToneAudioNode, ToneAudioNodeOptions } from "../../core/context/ToneAudioNode";
 import { Merge } from "./Merge";
-export type MidSideMergeOptions = ToneAudioNodeOptions;
+export declare type MidSideMergeOptions = ToneAudioNodeOptions;
 /**
  * MidSideMerge merges the mid and side signal after they've been separated by [[MidSideSplit]]
  * ```

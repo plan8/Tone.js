@@ -5,7 +5,7 @@ import { Signal } from "../signal/Signal";
 import { Split } from "../component/channel/Split";
 import { Gain } from "../core/context/Gain";
 import { Merge } from "../component/channel/Merge";
-export type StereoEffectOptions = EffectOptions;
+export declare type StereoEffectOptions = EffectOptions;
 /**
  * Base class for Stereo effects.
  */

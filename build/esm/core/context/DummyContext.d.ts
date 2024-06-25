@@ -1,10 +1,10 @@
 import { BaseContext } from "./BaseContext";
 import { Seconds } from "../type/Units";
 import { AnyAudioContext } from "./AudioContext";
-type Draw = import("../util/Draw").Draw;
-type Destination = import("./Destination").Destination;
-type Transport = import("../clock/Transport").Transport;
-type Listener = import("./Listener").Listener;
+declare type Draw = import("../util/Draw").Draw;
+declare type Destination = import("./Destination").Destination;
+declare type Transport = import("../clock/Transport").Transport;
+declare type Listener = import("./Listener").Listener;
 export declare class DummyContext extends BaseContext {
     createAnalyser(): AnalyserNode;
     createOscillator(): OscillatorNode;

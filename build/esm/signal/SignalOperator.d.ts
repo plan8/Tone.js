@@ -1,5 +1,5 @@
 import { InputNode, ToneAudioNode, ToneAudioNodeOptions } from "../core/context/ToneAudioNode";
-export type SignalOperatorOptions = ToneAudioNodeOptions;
+export declare type SignalOperatorOptions = ToneAudioNodeOptions;
 /**
  * A signal operator has an input and output and modifies the signal.
  */

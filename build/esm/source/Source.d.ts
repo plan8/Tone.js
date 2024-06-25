@@ -4,7 +4,7 @@ import { Param } from "../core/context/Param";
 import { OutputNode, ToneAudioNode, ToneAudioNodeOptions } from "../core/context/ToneAudioNode";
 import { Decibels, Seconds, Time } from "../core/type/Units";
 import { BasicPlaybackState, StateTimeline } from "../core/util/StateTimeline";
-type onStopCallback = (source: Source<any>) => void;
+declare type onStopCallback = (source: Source<any>) => void;
 export interface SourceOptions extends ToneAudioNodeOptions {
     volume: Decibels;
     mute: boolean;

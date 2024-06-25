@@ -1,7 +1,7 @@
 import { ToneAudioNodeOptions } from "../core/context/ToneAudioNode";
 import { SignalOperator } from "./SignalOperator";
-export type WaveShaperMappingFn = (value: number, index?: number) => number;
-type WaveShaperMapping = WaveShaperMappingFn | number[] | Float32Array;
+export declare type WaveShaperMappingFn = (value: number, index?: number) => number;
+declare type WaveShaperMapping = WaveShaperMappingFn | number[] | Float32Array;
 interface WaveShaperOptions extends ToneAudioNodeOptions {
     mapping?: WaveShaperMapping;
     length: number;

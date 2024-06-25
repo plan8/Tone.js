@@ -1,5 +1,5 @@
 import { Seconds, Ticks } from "../type/Units";
-type Transport = import("../clock/Transport").Transport;
+declare type Transport = import("../clock/Transport").Transport;
 export interface TransportEventOptions {
     callback: (time: number) => void;
     once: boolean;

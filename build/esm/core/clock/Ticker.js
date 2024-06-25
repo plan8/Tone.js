@@ -70,6 +70,7 @@ export class Ticker {
     _disposeClock() {
         if (this._timeout) {
             clearTimeout(this._timeout);
+            // @ts-ignore
             this._timeout = 0;
         }
         if (this._worker) {

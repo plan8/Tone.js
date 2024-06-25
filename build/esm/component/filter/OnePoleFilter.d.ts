@@ -1,7 +1,7 @@
 import { ToneAudioNode, ToneAudioNodeOptions } from "../../core/context/ToneAudioNode";
 import { Frequency } from "../../core/type/Units";
 import { Gain } from "../../core/context/Gain";
-export type OnePoleFilterType = "highpass" | "lowpass";
+export declare type OnePoleFilterType = "highpass" | "lowpass";
 export interface OnePoleFilterOptions extends ToneAudioNodeOptions {
     frequency: Frequency;
     type: OnePoleFilterType;

@@ -4,12 +4,12 @@ import { Context } from "./core/context/Context";
 import { Listener } from "./core/context/Listener";
 import { Destination } from "./core/context/Destination";
 import { Draw } from "./core/util/Draw";
-type ClassesWithoutSingletons = Omit<typeof Classes, "Transport" | "Destination" | "Draw">;
+declare type ClassesWithoutSingletons = Omit<typeof Classes, "Transport" | "Destination" | "Draw">;
 /**
  * The exported Tone object. Contains all of the classes that default
  * to the same context and contains a singleton Transport and Destination node.
  */
-type Tone = {
+declare type Tone = {
     Transport: Transport;
     Destination: Destination;
     Listener: Listener;

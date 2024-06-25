@@ -7,7 +7,7 @@ export interface IntervalTimelineEvent {
     duration: number;
     [propName: string]: any;
 }
-type IteratorCallback = (event: IntervalTimelineEvent) => void;
+declare type IteratorCallback = (event: IntervalTimelineEvent) => void;
 /**
  * Similar to Tone.Timeline, but all events represent
  * intervals with both "time" and "duration" times. The

@@ -15,8 +15,8 @@ interface TransportOptions extends ToneWithContextOptions {
     loopEnd: Time;
     ppq: number;
 }
-type TransportEventNames = "start" | "stop" | "pause" | "loop" | "loopEnd" | "loopStart";
-type TransportCallback = (time: Seconds) => void;
+declare type TransportEventNames = "start" | "stop" | "pause" | "loop" | "loopEnd" | "loopStart";
+declare type TransportCallback = (time: Seconds) => void;
 /**
  * Transport for timing musical events.
  * Supports tempo curves and time changes. Unlike browser-based timing (setInterval, requestAnimationFrame)

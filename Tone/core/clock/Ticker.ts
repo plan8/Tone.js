@@ -107,6 +107,7 @@ export class Ticker {
 	private _disposeClock(): void {
 		if (this._timeout) {
 			clearTimeout(this._timeout);
+			// @ts-ignore
 			this._timeout = 0;
 		}
 		if (this._worker) {

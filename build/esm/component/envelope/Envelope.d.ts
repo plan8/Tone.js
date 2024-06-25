@@ -2,8 +2,8 @@ import { InputNode, OutputNode } from "../../core/context/ToneAudioNode";
 import { ToneAudioNode, ToneAudioNodeOptions } from "../../core/context/ToneAudioNode";
 import { NormalRange, Time } from "../../core/type/Units";
 import { Signal } from "../../signal/Signal";
-type BasicEnvelopeCurve = "linear" | "exponential";
-export type EnvelopeCurve = EnvelopeCurveName | number[];
+declare type BasicEnvelopeCurve = "linear" | "exponential";
+export declare type EnvelopeCurve = EnvelopeCurveName | number[];
 export interface EnvelopeOptions extends ToneAudioNodeOptions {
     attack: Time;
     decay: Time;
@@ -298,5 +298,5 @@ interface EnvelopeCurveMap {
     ripple: EnvelopeCurveObject;
     step: EnvelopeCurveObject;
 }
-type EnvelopeCurveName = keyof EnvelopeCurveMap;
+declare type EnvelopeCurveName = keyof EnvelopeCurveMap;
 export {};

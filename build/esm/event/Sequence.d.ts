@@ -1,6 +1,6 @@
 import { NormalRange, Positive, Seconds, Ticks, Time, TransportTime } from "../core/type/Units";
 import { ToneEvent, ToneEventCallback, ToneEventOptions } from "./ToneEvent";
-type SequenceEventDescription<T> = Array<T | Array<T | Array<T | Array<T | Array<T | T[]>>>>>;
+declare type SequenceEventDescription<T> = Array<T | Array<T | Array<T | Array<T | Array<T | T[]>>>>>;
 interface SequenceOptions<T> extends Omit<ToneEventOptions<T>, "value"> {
     loopStart: number;
     loopEnd: number;

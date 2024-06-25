@@ -1,6 +1,6 @@
 import { Tone } from "../Tone";
 import { Seconds } from "../type/Units";
-type TimelineSearchParam = "ticks" | "time";
+declare type TimelineSearchParam = "ticks" | "time";
 /**
  * The options object for Timeline
  */

@@ -1,6 +1,6 @@
 import { Gain } from "../../core/context/Gain";
 import { OutputNode, ToneAudioNode, ToneAudioNodeOptions } from "../../core/context/ToneAudioNode";
-export type MonoOptions = ToneAudioNodeOptions;
+export declare type MonoOptions = ToneAudioNodeOptions;
 /**
  * Mono coerces the incoming mono or stereo signal into a mono signal
  * where both left and right channels have the same value. This can be useful

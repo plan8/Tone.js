@@ -4,44 +4,44 @@ import { Note } from "./NoteUnits";
  * A number representing a time in seconds
  * @category Unit
  */
-export type Seconds = number;
+export declare type Seconds = number;
 /**
  * A number used to measure the intensity of a sound on a logarithmic scale.
  * @category Unit
  */
-export type Decibels = number;
+export declare type Decibels = number;
 /**
  * A number that is between [0, 1]
  * @category Unit
  */
-export type NormalRange = number;
+export declare type NormalRange = number;
 /**
  * A number that is between [-1, 1]
  * @category Unit
  */
-export type AudioRange = number;
+export declare type AudioRange = number;
 /**
  * Half-step note increments, i.e. 12 is an octave above the root. and 1 is a half-step up.
  * @category Unit
  */
-export type Interval = number;
+export declare type Interval = number;
 /**
  * A number representing the multiplication factor applied to a signal
  * @category Unit
  */
-export type GainFactor = number;
+export declare type GainFactor = number;
 /**
  * A number greater than or equal to 0.
  * @category Unit
  */
-export type Positive = number;
+export declare type Positive = number;
 /**
  * Represents a subdivision of a measure.
  * The number represents the subdivision. "t" represents a triplet. A "." add a half.
  * e.g. "4n" is a quarter note, "4t" is a quarter note triplet, and "4n." is a dotted quarter note.
  * @category Unit
  */
-export type Subdivision = "1m" | "1n" | "1n." | "2n" | "2n." | "2t" | "4n" | "4n." | "4t" | "8n" | "8n." | "8t" | "16n" | "16n." | "16t" | "32n" | "32n." | "32t" | "64n" | "64n." | "64t" | "128n" | "128n." | "128t" | "256n" | "256n." | "256t" | "0";
+export declare type Subdivision = "1m" | "1n" | "1n." | "2n" | "2n." | "2t" | "4n" | "4n." | "4t" | "8n" | "8n." | "8t" | "16n" | "16n." | "16t" | "32n" | "32n." | "32t" | "64n" | "64n." | "64t" | "128n" | "128n." | "128t" | "256n" | "256n." | "256t" | "0";
 /**
  * A time object has a subdivision as the keys and a number as the values.
  * @example
@@ -51,7 +51,7 @@ export type Subdivision = "1m" | "1n" | "1n." | "2n" | "2n." | "2t" | "4n" | "4n
  * }).valueOf(); // 2n + 8n * 3
  * @category Unit
  */
-export type TimeObject = {
+export declare type TimeObject = {
     [sub in Subdivision]?: number;
 };
 /**
@@ -65,7 +65,7 @@ export type TimeObject = {
  * * No Argument, for methods which accept time, no argument will be interpreted as "now" (i.e. the currentTime).
  * @category Unit
  */
-export type Time = string | Seconds | TimeObject | Subdivision;
+export declare type Time = string | Seconds | TimeObject | Subdivision;
 /**
  * Frequency can be described similar to time, except ultimately the
  * values are converted to frequency instead of seconds. A number
@@ -75,12 +75,12 @@ export type Time = string | Seconds | TimeObject | Subdivision;
  * frequency value.
  * @category Unit
  */
-export type Frequency = Subdivision | Note | string | Hertz;
+export declare type Frequency = Subdivision | Note | string | Hertz;
 /**
  *
  * @category Unit
  */
-export type TimeSignature = number | number[];
+export declare type TimeSignature = number | number[];
 /**
  * TransportTime describes a position along the Transport's timeline. It is
  * similar to Time in that it uses all the same encodings, but TransportTime specifically
@@ -88,61 +88,61 @@ export type TimeSignature = number | number[];
  * [Read more](https://github.com/Tonejs/Tone.js/wiki/TransportTime)
  * @category Unit
  */
-export type TransportTime = Time;
+export declare type TransportTime = Time;
 /**
  * Ticks are the basic subunit of the Transport. They are
  * the smallest unit of time that the Transport supports.
  * @category Unit
  */
-export type Ticks = number;
+export declare type Ticks = number;
 /**
  * Beats per minute
  * @category Unit
  */
-export type BPM = number;
+export declare type BPM = number;
 /**
  * Angle between 0 and 360.
  * @category Unit
  */
-export type Degrees = number;
+export declare type Degrees = number;
 /**
  * Angle between 0 and 2 * PI.
  * @category Unit
  */
-export type Radians = number;
+export declare type Radians = number;
 /**
  * A colon-separated representation of time in the form of
  * Bars:Beats:Sixteenths.
  * @category Unit
  */
-export type BarsBeatsSixteenths = string;
+export declare type BarsBeatsSixteenths = string;
 /**
  * Sampling is the reduction of a continuous signal to a discrete signal.
  * Audio is typically sampled 44100 times per second.
  * @category Unit
  */
-export type Samples = number;
+export declare type Samples = number;
 /**
  * Hertz are a frequency representation defined as one cycle per second.
  * @category Unit
  */
-export type Hertz = number;
+export declare type Hertz = number;
 /**
  * A Cent is 1/100th of a semitone.
  * e.g. a value of 50 cents would be halfway between two intervals.
  * @category Unit
  */
-export type Cents = number;
+export declare type Cents = number;
 /**
  * One millisecond is a thousandth of a second.
  * @category Unit
  */
-export type Milliseconds = number;
+export declare type Milliseconds = number;
 /**
  * A value which is a power of 2
  * @category Unit
  */
-export type PowerOfTwo = number;
+export declare type PowerOfTwo = number;
 /**
  * Map the unit name to a unit value
  */
@@ -168,9 +168,9 @@ export interface UnitMap {
  * All of the unit types
  * @category Unit
  */
-export type Unit = UnitMap[keyof UnitMap];
+export declare type Unit = UnitMap[keyof UnitMap];
 /**
  * All of the unit names
  * @category Unit
  */
-export type UnitName = keyof UnitMap;
+export declare type UnitName = keyof UnitMap;

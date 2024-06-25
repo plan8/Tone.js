@@ -1,6 +1,6 @@
 import { InputNode, OutputNode, ToneAudioNode, ToneAudioNodeOptions } from "../../core/context/ToneAudioNode";
 import { Analyser } from "./Analyser";
-export type MeterBaseOptions = ToneAudioNodeOptions;
+export declare type MeterBaseOptions = ToneAudioNodeOptions;
 /**
  * The base class for Metering classes.
  */

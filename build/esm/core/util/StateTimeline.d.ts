@@ -1,7 +1,7 @@
 import { Seconds } from "../type/Units";
 import { Timeline, TimelineEvent } from "./Timeline";
-export type BasicPlaybackState = "started" | "stopped";
-export type PlaybackState = BasicPlaybackState | "paused";
+export declare type BasicPlaybackState = "started" | "stopped";
+export declare type PlaybackState = BasicPlaybackState | "paused";
 export interface StateTimelineEvent extends TimelineEvent {
     state: PlaybackState;
 }
