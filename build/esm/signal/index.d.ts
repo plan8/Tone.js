@@ -1,2 +1,2 @@
-export * from "./Signal";
-export * from "./WaveShaper";
+export * from "./Signal.js";
+export * from "./WaveShaper.js";

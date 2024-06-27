@@ -5,6 +5,7 @@ import { Note } from "tonal";
 import { Offline } from "../../test/helper/Offline.js";
 import { expect } from "chai";
 import { CompareToFile } from "../../test/helper/CompareToFile.js";
+//@ts-ignore
 import { Noise } from "../source/index.js";
 
 describe("AutoFilter", () => {

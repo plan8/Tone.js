@@ -7,11 +7,11 @@
 // export * from "./Multiply";
 // export * from "./Negate";
 // export * from "./Pow";
-export * from "./Signal";
+export * from "./Signal.js";
 // export * from "./Scale";
 // export * from "./ScaleExp";
 // export * from "./Subtract";
 // export * from "./SyncedSignal";
-export * from "./WaveShaper";
+export * from "./WaveShaper.js";
 // export * from "./Zero";
 //# sourceMappingURL=index.js.map

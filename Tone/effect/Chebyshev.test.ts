@@ -3,6 +3,7 @@ import { BasicTests } from "../../test/helper/Basic.js";
 import { EffectTests } from "../../test/helper/EffectTests.js";
 import { expect } from "chai";
 import { CompareToFile } from "../../test/helper/CompareToFile.js";
+//@ts-ignore
 import { Synth } from "../instrument/index.js";
 
 describe("Chebyshev", () => {

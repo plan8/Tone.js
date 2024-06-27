@@ -77,7 +77,6 @@ interface Logger {
  * The default logger is the console
  */
 let defaultLogger: Logger = console;
-
 /**
  * Set the logging interface
  */

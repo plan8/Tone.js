@@ -1,6 +1,7 @@
 import { BasicTests } from "../../test/helper/Basic.js";
 import { UserMedia } from "./UserMedia.js";
 import { expect } from "chai";
+//@ts-ignore
 import { OfflineContext } from "../core/index.js";
 
 describe("UserMedia", () => {

@@ -19,7 +19,7 @@ export * from "./type/Time.js";
 export * from "./type/Ticks.js";
 export * from "./type/TransportTime.js";
 
-import "./util/Draw";
+import "./util/Draw.js";
 export * from "./util/Emitter.js";
 // export * from "./util/IntervalTimeline";
 // export * from "./util/StateTimeline";

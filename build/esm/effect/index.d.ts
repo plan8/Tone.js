@@ -1,1 +1,1 @@
-export * from "./PingPongDelay";
+export * from "./PingPongDelay.js";
