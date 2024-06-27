@@ -1,15 +1,25 @@
-import { ToneAudioBuffer } from "../core/context/ToneAudioBuffer";
-import { ToneAudioBuffers } from "../core/context/ToneAudioBuffers";
-import { ftomf, intervalToFrequencyRatio } from "../core/type/Conversions";
-import { FrequencyClass } from "../core/type/Frequency";
-import { Frequency, Interval, MidiNote, NormalRange, Note, Time } from "../core/type/Units";
-import { optionsFromArguments } from "../core/util/Defaults";
-import { noOp } from "../core/util/Interface";
-import { isArray, isNote, isNumber } from "../core/util/TypeCheck";
-import { Instrument, InstrumentOptions } from "../instrument/Instrument";
-import { ToneBufferSource, ToneBufferSourceCurve } from "../source/buffer/ToneBufferSource";
-import { timeRange } from "../core/util/Decorator";
-import { assert } from "../core/util/Debug";
+import { ToneAudioBuffer } from "../core/context/ToneAudioBuffer.js";
+import { ToneAudioBuffers } from "../core/context/ToneAudioBuffers.js";
+import { ftomf, intervalToFrequencyRatio } from "../core/type/Conversions.js";
+import { FrequencyClass } from "../core/type/Frequency.js";
+import {
+	Frequency,
+	Interval,
+	MidiNote,
+	NormalRange,
+	Note,
+	Time,
+} from "../core/type/Units.js";
+import { optionsFromArguments } from "../core/util/Defaults.js";
+import { noOp } from "../core/util/Interface.js";
+import { isArray, isNote, isNumber } from "../core/util/TypeCheck.js";
+import { Instrument, InstrumentOptions } from "../instrument/Instrument.js";
+import {
+	ToneBufferSource,
+	ToneBufferSourceCurve,
+} from "../source/buffer/ToneBufferSource.js";
+import { timeRange } from "../core/util/Decorator.js";
+import { assert } from "../core/util/Debug.js";
 
 interface SamplesMap {
 	[note: string]: ToneAudioBuffer | AudioBuffer | string;
@@ -36,7 +46,7 @@ export interface SamplerOptions extends InstrumentOptions {
  * were not explicitly included which can save loading time.
  *
  * For sample or buffer playback where repitching is not necessary,
- * use [[Player]].
+ * use {@link Player}.
  * @example
  * const sampler = new Tone.Sampler({
  * 	urls: {
@@ -51,7 +61,6 @@ export interface SamplerOptions extends InstrumentOptions {
  * @category Instrument
  */
 export class Sampler extends Instrument<SamplerOptions> {
-
 	readonly name: string = "Sampler";
 
 	/**
@@ -103,18 +112,27 @@ export class Sampler extends Instrument<SamplerOptions> {
 	 * 			Scientific Pitch Notation to the url of that sample.
 	 * @param options The remaining options associated with the sampler
 	 */
-	constructor(samples?: SamplesMap, options?: Partial<Omit<SamplerOptions, "urls">>);
+	constructor(
+		samples?: SamplesMap,
+		options?: Partial<Omit<SamplerOptions, "urls">>
+	);
 	constructor(options?: Partial<SamplerOptions>);
 	constructor() {
-
-		super(optionsFromArguments(Sampler.getDefaults(), arguments, ["urls", "onload", "baseUrl"], "urls"));
-		const options = optionsFromArguments(Sampler.getDefaults(), arguments, ["urls", "onload", "baseUrl"], "urls");
+		const options = optionsFromArguments(
+			Sampler.getDefaults(),
+			arguments,
+			["urls", "onload", "baseUrl"],
+			"urls"
+		);
+		super(options);
 
 		const urlMap = {};
 		Object.keys(options.urls).forEach((note) => {
 			const noteNumber = parseInt(note, 10);
-			assert(isNote(note)
-				|| (isNumber(noteNumber) && isFinite(noteNumber)), `url key is neither a note or midi pitch: ${note}`);
+			assert(
+				isNote(note) || (isNumber(noteNumber) && isFinite(noteNumber)),
+				`url key is neither a note or midi pitch: ${note}`
+			);
 			if (isNote(note)) {
 				// convert the note name to MIDI
 				const mid = new FrequencyClass(this.context, note).toMidi();
@@ -149,7 +167,7 @@ export class Sampler extends Instrument<SamplerOptions> {
 		return Object.assign(Instrument.getDefaults(), {
 			attack: 0,
 			baseUrl: "",
-			curve: "exponential" as "exponential",
+			curve: "exponential" as const,
 			onload: noOp,
 			onerror: noOp,
 			release: 0.1,
@@ -184,20 +202,28 @@ export class Sampler extends Instrument<SamplerOptions> {
 	 * @param  time     When to play the note
 	 * @param  velocity The velocity to play the sample back.
 	 */
-	triggerAttack(notes: Frequency | Frequency[], time?: Time, velocity: NormalRange = 1): this {
+	triggerAttack(
+		notes: Frequency | Frequency[],
+		time?: Time,
+		velocity: NormalRange = 1
+	): this {
 		this.log("triggerAttack", notes, time, velocity);
 		if (!Array.isArray(notes)) {
 			notes = [notes];
 		}
-		notes.forEach(note => {
-			const midiFloat = ftomf(new FrequencyClass(this.context, note).toFrequency());
+		notes.forEach((note) => {
+			const midiFloat = ftomf(
+				new FrequencyClass(this.context, note).toFrequency()
+			);
 			const midi = Math.round(midiFloat) as MidiNote;
 			const remainder = midiFloat - midi;
 			// find the closest note pitch
 			const difference = this._findClosest(midi);
 			const closestNote = midi - difference;
 			const buffer = this._buffers.get(closestNote);
-			const playbackRate = intervalToFrequencyRatio(difference + remainder);
+			const playbackRate = intervalToFrequencyRatio(
+				difference + remainder
+			);
 			// play that note
 			const source = new ToneBufferSource({
 				url: buffer,
@@ -225,7 +251,9 @@ export class Sampler extends Instrument<SamplerOptions> {
 			// remove it when it's done
 			source.onended = () => {
 				if (this._activeSources && this._activeSources.has(midi)) {
-					const sources = this._activeSources.get(midi) as ToneBufferSource[];
+					const sources = this._activeSources.get(
+						midi
+					) as ToneBufferSource[];
 					const index = sources.indexOf(source);
 					if (index !== -1) {
 						sources.splice(index, 1);
@@ -245,13 +273,18 @@ export class Sampler extends Instrument<SamplerOptions> {
 		if (!Array.isArray(notes)) {
 			notes = [notes];
 		}
-		notes.forEach(note => {
+		notes.forEach((note) => {
 			const midi = new FrequencyClass(this.context, note).toMidi();
 			// find the note
-			if (this._activeSources.has(midi) && (this._activeSources.get(midi) as ToneBufferSource[]).length) {
-				const sources = this._activeSources.get(midi) as ToneBufferSource[];
+			if (
+				this._activeSources.has(midi) &&
+				(this._activeSources.get(midi) as ToneBufferSource[]).length
+			) {
+				const sources = this._activeSources.get(
+					midi
+				) as ToneBufferSource[];
 				time = this.toSeconds(time);
-				sources.forEach(source => {
+				sources.forEach((source) => {
 					source.stop(time);
 				});
 				this._activeSources.set(midi, []);
@@ -266,7 +299,7 @@ export class Sampler extends Instrument<SamplerOptions> {
 	 */
 	releaseAll(time?: Time): this {
 		const computedTime = this.toSeconds(time);
-		this._activeSources.forEach(sources => {
+		this._activeSources.forEach((sources) => {
 			while (sources.length) {
 				const source = sources.shift() as ToneBufferSource;
 				source.stop(computedTime);
@@ -294,12 +327,15 @@ export class Sampler extends Instrument<SamplerOptions> {
 		notes: Frequency[] | Frequency,
 		duration: Time | Time[],
 		time?: Time,
-		velocity: NormalRange = 1,
+		velocity: NormalRange = 1
 	): this {
 		const computedTime = this.toSeconds(time);
 		this.triggerAttack(notes, computedTime, velocity);
 		if (isArray(duration)) {
-			assert(isArray(notes), "notes must be an array when duration is array");
+			assert(
+				isArray(notes),
+				"notes must be an array when duration is array"
+			);
 			(notes as Frequency[]).forEach((note, index) => {
 				const d = duration[Math.min(index, duration.length - 1)];
 				this.triggerRelease(note, computedTime + this.toSeconds(d));
@@ -316,8 +352,15 @@ export class Sampler extends Instrument<SamplerOptions> {
 	 * @param  url  Either the url of the buffer, or a buffer which will be added with the given name.
 	 * @param  callback  The callback to invoke when the url is loaded.
 	 */
-	add(note: Note | MidiNote, url: string | ToneAudioBuffer | AudioBuffer, callback?: () => void): this {
-		assert(isNote(note) || isFinite(note), `note must be a pitch or midi: ${note}`);
+	add(
+		note: Note | MidiNote,
+		url: string | ToneAudioBuffer | AudioBuffer,
+		callback?: () => void
+	): this {
+		assert(
+			isNote(note) || isFinite(note),
+			`note must be a pitch or midi: ${note}`
+		);
 		if (isNote(note)) {
 			// convert the note name to MIDI
 			const mid = new FrequencyClass(this.context, note).toMidi();
@@ -342,8 +385,8 @@ export class Sampler extends Instrument<SamplerOptions> {
 	dispose(): this {
 		super.dispose();
 		this._buffers.dispose();
-		this._activeSources.forEach(sources => {
-			sources.forEach(source => source.dispose());
+		this._activeSources.forEach((sources) => {
+			sources.forEach((source) => source.dispose());
 		});
 		this._activeSources.clear();
 		return this;

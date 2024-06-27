@@ -1,5 +1,5 @@
-import { Tone } from "../Tone";
-import { isUndef } from "./TypeCheck";
+import { Tone } from "../Tone.js";
+import { isUndef } from "./TypeCheck.js";
 
 export interface EmitterEventObject {
 	[event: string]: Array<(...args: any[]) => void>;
@@ -13,7 +13,6 @@ export interface EmitterEventObject {
  * @category Core
  */
 export class Emitter<EventType extends string = string> extends Tone {
-
 	readonly name: string = "Emitter";
 
 	/**
@@ -29,7 +28,7 @@ export class Emitter<EventType extends string = string> extends Tone {
 	on(event: EventType, callback: (...args: any[]) => void): this {
 		// split the event
 		const events = event.split(/\W+/);
-		events.forEach(eventName => {
+		events.forEach((eventName) => {
 			if (isUndef(this._events)) {
 				this._events = {};
 			}
@@ -65,15 +64,15 @@ export class Emitter<EventType extends string = string> extends Tone {
 	 */
 	off(event: EventType, callback?: (...args: any[]) => void): this {
 		const events = event.split(/\W+/);
-		events.forEach(eventName => {
+		events.forEach((eventName) => {
 			if (isUndef(this._events)) {
 				this._events = {};
 			}
-			if (this._events.hasOwnProperty(event)) {
+			if (this._events.hasOwnProperty(eventName)) {
 				if (isUndef(callback)) {
-					this._events[event] = [];
+					this._events[eventName] = [];
 				} else {
-					const eventList = this._events[event];
+					const eventList = this._events[eventName];
 					for (let i = eventList.length - 1; i >= 0; i--) {
 						if (eventList[i] === callback) {
 							eventList.splice(i, 1);
@@ -91,7 +90,7 @@ export class Emitter<EventType extends string = string> extends Tone {
 	 * @param  event  The name of the event.
 	 * @param args The arguments to pass to the functions listening.
 	 */
-	emit(event, ...args: any[]): this {
+	emit(event: EventType, ...args: any[]): this {
 		if (this._events) {
 			if (this._events.hasOwnProperty(event)) {
 				const eventList = this._events[event].slice(0);
@@ -108,8 +107,11 @@ export class Emitter<EventType extends string = string> extends Tone {
 	 */
 	static mixin(constr: any): void {
 		// instance._events = {};
-		["on", "once", "off", "emit"].forEach(name => {
-			const property = Object.getOwnPropertyDescriptor(Emitter.prototype, name) as PropertyDescriptor;
+		["on", "once", "off", "emit"].forEach((name) => {
+			const property = Object.getOwnPropertyDescriptor(
+				Emitter.prototype,
+				name
+			) as PropertyDescriptor;
 			Object.defineProperty(constr.prototype, name, property);
 		});
 	}

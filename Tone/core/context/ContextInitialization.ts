@@ -1,8 +1,7 @@
 //-------------------------------------
 // INITIALIZING NEW CONTEXT
 //-------------------------------------
-
-type Context = import("./Context").Context;
+import type { Context } from "./Context.js";
 
 /**
  * Array of callbacks to invoke when a new context is created
@@ -21,11 +20,11 @@ export function onContextInit(cb: (ctx: Context) => void): void {
  */
 export function initializeContext(ctx: Context): void {
 	// add any additional modules
-	notifyNewContext.forEach(cb => cb(ctx));
+	notifyNewContext.forEach((cb) => cb(ctx));
 }
 
 /**
- * Array of callbacks to invoke when a new context is created
+ * Array of callbacks to invoke when a new context is closed
  */
 const notifyCloseContext: Array<(ctx: Context) => void> = [];
 
@@ -37,6 +36,6 @@ export function onContextClose(cb: (ctx: Context) => void): void {
 }
 
 export function closeContext(ctx: Context): void {
-	// add any additional modules
-	notifyCloseContext.forEach(cb => cb(ctx));
+	// remove any additional modules
+	notifyCloseContext.forEach((cb) => cb(ctx));
 }

@@ -1,14 +1,12 @@
 import { expect } from "chai";
-import { BasicTests } from "test/helper/Basic";
-import { Offline } from "test/helper/Offline";
-import { TickSource } from "./TickSource";
+import { BasicTests } from "../../../test/helper/Basic.js";
+import { Offline } from "../../../test/helper/Offline.js";
+import { TickSource } from "./TickSource.js";
 
 describe("TickSource", () => {
-
 	BasicTests(TickSource);
 
 	context("Constructor", () => {
-
 		it("can pass in the frequency", () => {
 			const source = new TickSource(2);
 			expect(source.frequency.value).to.equal(2);
@@ -23,7 +21,6 @@ describe("TickSource", () => {
 	});
 
 	context("Ticks", () => {
-
 		it("ticks are 0 before started", () => {
 			const source = new TickSource();
 			expect(source.ticks).to.equal(0);
@@ -42,7 +39,7 @@ describe("TickSource", () => {
 			return Offline(() => {
 				const source = new TickSource();
 				source.start(0);
-				return time => {
+				return (time) => {
 					expect(source.ticks).to.be.closeTo(time, 0.1);
 				};
 			}, 0.5);
@@ -52,7 +49,7 @@ describe("TickSource", () => {
 			return Offline(() => {
 				const source = new TickSource(2);
 				source.start(0).stop(0.4);
-				return time => {
+				return (time) => {
 					if (time < 0.399) {
 						expect(source.ticks).to.be.closeTo(2 * time, 0.01);
 					} else if (time > 0.4) {
@@ -67,7 +64,7 @@ describe("TickSource", () => {
 				const source = new TickSource(2);
 				source.start(0).pause(0.4);
 				let pausedTicks = -1;
-				return time => {
+				return (time) => {
 					if (time < 0.4) {
 						pausedTicks = source.ticks;
 						expect(source.ticks).to.be.closeTo(2 * time, 0.01);
@@ -237,10 +234,38 @@ describe("TickSource", () => {
 			expect(source.getTicksAtTime(6)).to.be.closeTo(6, 0.01);
 			source.dispose();
 		});
+
+		it("will recompute memoized values when events are modified", () => {
+			const source = new TickSource(1);
+			source.start(3).pause(4);
+			expect(source.getTicksAtTime(1)).to.be.closeTo(0, 0.01);
+			expect(source.getTicksAtTime(2)).to.be.closeTo(0, 0.01);
+			expect(source.getTicksAtTime(3)).to.be.closeTo(0, 0.01);
+			expect(source.getTicksAtTime(4)).to.be.closeTo(1, 0.01);
+			expect(source.getTicksAtTime(5)).to.be.closeTo(1, 0.01);
+			source.start(1).pause(2);
+			expect(source.getTicksAtTime(1)).to.be.closeTo(0, 0.01);
+			expect(source.getTicksAtTime(2)).to.be.closeTo(1, 0.01);
+			expect(source.getTicksAtTime(3)).to.be.closeTo(1, 0.01);
+			expect(source.getTicksAtTime(4)).to.be.closeTo(2, 0.01);
+			expect(source.getTicksAtTime(5)).to.be.closeTo(2, 0.01);
+			source.setTicksAtTime(3, 1);
+			expect(source.getTicksAtTime(1)).to.be.closeTo(3, 0.01);
+			expect(source.getTicksAtTime(2)).to.be.closeTo(4, 0.01);
+			expect(source.getTicksAtTime(3)).to.be.closeTo(4, 0.01);
+			expect(source.getTicksAtTime(4)).to.be.closeTo(5, 0.01);
+			expect(source.getTicksAtTime(5)).to.be.closeTo(5, 0.01);
+			source.cancel(4);
+			expect(source.getTicksAtTime(1)).to.be.closeTo(3, 0.01);
+			expect(source.getTicksAtTime(2)).to.be.closeTo(4, 0.01);
+			expect(source.getTicksAtTime(3)).to.be.closeTo(4, 0.01);
+			expect(source.getTicksAtTime(4)).to.be.closeTo(5, 0.01);
+			expect(source.getTicksAtTime(5)).to.be.closeTo(6, 0.01);
+			source.dispose();
+		});
 	});
 
 	context("forEachTickBetween", () => {
-
 		it("invokes a callback function when started", () => {
 			const source = new TickSource(1);
 			source.start(0);
@@ -267,7 +292,9 @@ describe("TickSource", () => {
 			const source = new TickSource(4);
 			source.start(0.2).pause(2).start(3.5).stop(5);
 			let iterations = 0;
-			const expectedTimes = [1.2, 1.45, 1.7, 1.95, 3.5, 3.75, 4, 4.25, 4.5, 4.75];
+			const expectedTimes = [
+				1.2, 1.45, 1.7, 1.95, 3.5, 3.75, 4, 4.25, 4.5, 4.75,
+			];
 			const expectedTicks = [4, 5, 6, 7, 7, 8, 9, 10, 11, 12];
 			source.forEachTickBetween(1, 7, (time, ticks) => {
 				expect(time).to.be.closeTo(expectedTimes[iterations], 0.001);
@@ -372,7 +399,7 @@ describe("TickSource", () => {
 			source.start(0.5).stop(2).start(2.5).stop(4.1);
 			let iterations = 0;
 			const times = [0.5, 1.0, 1.5, 2.5, 3, 3.5, 4];
-			source.forEachTickBetween(0, 10, time => {
+			source.forEachTickBetween(0, 10, (time) => {
 				expect(times[iterations]).to.be.closeTo(time, 0.001);
 				iterations++;
 			});
@@ -386,7 +413,7 @@ describe("TickSource", () => {
 			source.frequency.linearRampToValueAtTime(4, 1);
 			source.start(0.5);
 			let iterations = 0;
-			const times = [0.500, 0.833, 1.094, 1.344, 1.594, 1.844];
+			const times = [0.5, 0.833, 1.094, 1.344, 1.594, 1.844];
 			source.forEachTickBetween(0, 2, (time, ticks) => {
 				expect(time).to.be.closeTo(times[ticks], 0.001);
 				iterations++;
@@ -442,7 +469,7 @@ describe("TickSource", () => {
 			source.start(0.5);
 			let iterations = 0;
 			let lastTime = 0.5;
-			source.forEachTickBetween(0.51, 2.01, time => {
+			source.forEachTickBetween(0.51, 2.01, (time) => {
 				expect(time - lastTime).to.be.closeTo(0.05, 0.001);
 				lastTime = time;
 				iterations++;
@@ -516,15 +543,13 @@ describe("TickSource", () => {
 			});
 			source.dispose();
 		});
-
 	});
 
 	context("Seconds", () => {
-
 		it("get the elapsed time in seconds", () => {
 			return Offline(() => {
 				const source = new TickSource(1).start(0);
-				return time => {
+				return (time) => {
 					expect(source.seconds).to.be.closeTo(time, 0.01);
 				};
 			}, 2);
@@ -534,14 +559,12 @@ describe("TickSource", () => {
 			const source = new TickSource(1);
 			expect(source.seconds).to.be.closeTo(0, 0.001);
 			source.dispose();
-
 		});
 
 		it("can set the seconds", () => {
 			const source = new TickSource(1);
 			expect(source.seconds).to.be.closeTo(0, 0.001);
 			source.dispose();
-
 		});
 
 		it("seconds pauses at last second count", () => {
@@ -570,7 +593,7 @@ describe("TickSource", () => {
 		it("get the elapsed time in seconds when starting in the future", () => {
 			return Offline(() => {
 				const source = new TickSource(1).start(0.1);
-				return time => {
+				return (time) => {
 					if (time < 0.1) {
 						expect(source.seconds).to.be.closeTo(0, 0.001);
 					} else {
@@ -581,7 +604,11 @@ describe("TickSource", () => {
 		});
 
 		it("handles multiple starts and stops", () => {
-			const source = new TickSource(1).start(0).stop(0.5).start(1).stop(1.5);
+			const source = new TickSource(1)
+				.start(0)
+				.stop(0.5)
+				.start(1)
+				.stop(1.5);
 			expect(source.getSecondsAtTime(0)).to.be.closeTo(0, 0.01);
 			expect(source.getSecondsAtTime(0.4)).to.be.closeTo(0.4, 0.01);
 			expect(source.getSecondsAtTime(0.5)).to.be.closeTo(0, 0.01);
@@ -591,10 +618,32 @@ describe("TickSource", () => {
 			expect(source.getSecondsAtTime(1.5)).to.be.closeTo(0, 0.01);
 			source.dispose();
 		});
+
+		it("will recompute memoized values when events are modified", () => {
+			const source = new TickSource(1);
+			source.start(3).pause(4);
+			expect(source.getSecondsAtTime(1)).to.be.closeTo(0, 0.01);
+			expect(source.getSecondsAtTime(2)).to.be.closeTo(0, 0.01);
+			expect(source.getSecondsAtTime(3)).to.be.closeTo(0, 0.01);
+			expect(source.getSecondsAtTime(4)).to.be.closeTo(1, 0.01);
+			expect(source.getSecondsAtTime(5)).to.be.closeTo(1, 0.01);
+			source.start(1).pause(2);
+			expect(source.getSecondsAtTime(1)).to.be.closeTo(0, 0.01);
+			expect(source.getSecondsAtTime(2)).to.be.closeTo(1, 0.01);
+			expect(source.getSecondsAtTime(3)).to.be.closeTo(1, 0.01);
+			expect(source.getSecondsAtTime(4)).to.be.closeTo(2, 0.01);
+			expect(source.getSecondsAtTime(5)).to.be.closeTo(2, 0.01);
+			source.cancel(4);
+			expect(source.getSecondsAtTime(1)).to.be.closeTo(0, 0.01);
+			expect(source.getSecondsAtTime(2)).to.be.closeTo(1, 0.01);
+			expect(source.getSecondsAtTime(3)).to.be.closeTo(1, 0.01);
+			expect(source.getSecondsAtTime(4)).to.be.closeTo(2, 0.01);
+			expect(source.getSecondsAtTime(5)).to.be.closeTo(3, 0.01);
+			source.dispose();
+		});
 	});
 
 	context("Frequency", () => {
-
 		it("can automate frequency with setValueAtTime", () => {
 			const source = new TickSource(1);
 			source.start(0).stop(0.3).start(0.4).stop(0.5).start(0.6);
@@ -651,5 +700,4 @@ describe("TickSource", () => {
 			source.dispose();
 		});
 	});
-
 });

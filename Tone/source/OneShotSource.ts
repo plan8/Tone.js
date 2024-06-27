@@ -1,12 +1,12 @@
-import { Gain } from "../core/context/Gain";
+import { Gain } from "../core/context/Gain.js";
 import {
 	ToneAudioNode,
 	ToneAudioNodeOptions,
-} from "../core/context/ToneAudioNode";
-import { GainFactor, Seconds, Time } from "../core/type/Units";
-import { noOp } from "../core/util/Interface";
-import { assert } from "../core/util/Debug";
-import { BasicPlaybackState } from "../core/util/StateTimeline";
+} from "../core/context/ToneAudioNode.js";
+import { GainFactor, Seconds, Time } from "../core/type/Units.js";
+import { noOp } from "../core/util/Interface.js";
+import { assert } from "../core/util/Debug.js";
+import { BasicPlaybackState } from "../core/util/StateTimeline.js";
 
 export type OneShotSourceCurve = "linear" | "exponential";
 
@@ -23,7 +23,7 @@ export interface OneShotSourceOptions extends ToneAudioNodeOptions {
  * Base class for fire-and-forget nodes
  */
 export abstract class OneShotSource<
-	Options extends ToneAudioNodeOptions
+	Options extends ToneAudioNodeOptions,
 > extends ToneAudioNode<Options> {
 	/**
 	 * The callback to invoke after the
@@ -168,7 +168,7 @@ export abstract class OneShotSource<
 
 		// schedule the stop callback
 		this._stopTime = this.toSeconds(time) + fadeOutTime;
-		this._stopTime = Math.max(this._stopTime, this.context.currentTime);
+		this._stopTime = Math.max(this._stopTime, this.now());
 		if (fadeOutTime > 0) {
 			// start the fade out curve at the given time
 			if (this._curve === "linear") {
@@ -217,7 +217,7 @@ export abstract class OneShotSource<
 	/**
 	 * Get the playback state at the given time
 	 */
-	getStateAtTime = function(time: Time): BasicPlaybackState {
+	getStateAtTime = function (time: Time): BasicPlaybackState {
 		const computedTime = this.toSeconds(time);
 		if (
 			this._startTime !== -1 &&
@@ -254,7 +254,8 @@ export abstract class OneShotSource<
 
 	dispose(): this {
 		super.dispose();
-		this._gainNode.disconnect();
+		this._gainNode.dispose();
+		this.onended = noOp;
 		return this;
 	}
 }

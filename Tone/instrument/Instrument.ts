@@ -1,9 +1,13 @@
-import { Volume } from "../component/channel/Volume";
-import { Param } from "../core/context/Param";
-import { OutputNode, ToneAudioNode, ToneAudioNodeOptions } from "../core/context/ToneAudioNode";
-import { Decibels, Frequency, NormalRange, Time } from "../core/type/Units";
-import { optionsFromArguments } from "../core/util/Defaults";
-import { readOnly } from "../core/util/Interface";
+import { Volume } from "../component/channel/Volume.js";
+import { Param } from "../core/context/Param.js";
+import {
+	OutputNode,
+	ToneAudioNode,
+	ToneAudioNodeOptions,
+} from "../core/context/ToneAudioNode.js";
+import { Decibels, Frequency, NormalRange, Time } from "../core/type/Units.js";
+import { optionsFromArguments } from "../core/util/Defaults.js";
+import { readOnly } from "../core/util/Interface.js";
 
 export interface InstrumentOptions extends ToneAudioNodeOptions {
 	volume: Decibels;
@@ -12,8 +16,9 @@ export interface InstrumentOptions extends ToneAudioNodeOptions {
 /**
  * Base-class for all instruments
  */
-export abstract class Instrument<Options extends InstrumentOptions> extends ToneAudioNode<Options> {
-
+export abstract class Instrument<
+	Options extends InstrumentOptions,
+> extends ToneAudioNode<Options> {
 	/**
 	 * The output and volume triming node
 	 */
@@ -47,9 +52,11 @@ export abstract class Instrument<Options extends InstrumentOptions> extends Tone
 
 	constructor(options?: Partial<InstrumentOptions>);
 	constructor() {
-
-		super(optionsFromArguments(Instrument.getDefaults(), arguments));
-		const options = optionsFromArguments(Instrument.getDefaults(), arguments);
+		const options = optionsFromArguments(
+			Instrument.getDefaults(),
+			arguments
+		);
+		super(options);
 
 		this._volume = this.output = new Volume({
 			context: this.context,
@@ -67,7 +74,7 @@ export abstract class Instrument<Options extends InstrumentOptions> extends Tone
 
 	/**
 	 * Sync the instrument to the Transport. All subsequent calls of
-	 * [[triggerAttack]] and [[triggerRelease]] will be scheduled along the transport.
+	 * {@link triggerAttack} and {@link triggerRelease} will be scheduled along the transport.
 	 * @example
 	 * const fmSynth = new Tone.FMSynth().toDestination();
 	 * fmSynth.volume.value = -6;
@@ -83,6 +90,10 @@ export abstract class Instrument<Options extends InstrumentOptions> extends Tone
 		if (this._syncState()) {
 			this._syncMethod("triggerAttack", 1);
 			this._syncMethod("triggerRelease", 0);
+
+			this.context.transport.on("stop", this._syncedRelease);
+			this.context.transport.on("pause", this._syncedRelease);
+			this.context.transport.on("loopEnd", this._syncedRelease);
 		}
 		return this;
 	}
@@ -105,7 +116,7 @@ export abstract class Instrument<Options extends InstrumentOptions> extends Tone
 	 * @param  timePosition What position the time argument appears in
 	 */
 	protected _syncMethod(method: string, timePosition: number): void {
-		const originalMethod = this["_original_" + method] = this[method];
+		const originalMethod = (this["_original_" + method] = this[method]);
 		this[method] = (...args: any[]) => {
 			const time = args[timePosition];
 			const id = this.context.transport.schedule((t) => {
@@ -120,12 +131,16 @@ export abstract class Instrument<Options extends InstrumentOptions> extends Tone
 	 * Unsync the instrument from the Transport
 	 */
 	unsync(): this {
-		this._scheduledEvents.forEach(id => this.context.transport.clear(id));
+		this._scheduledEvents.forEach((id) => this.context.transport.clear(id));
 		this._scheduledEvents = [];
 		if (this._synced) {
 			this._synced = false;
 			this.triggerAttack = this._original_triggerAttack;
 			this.triggerRelease = this._original_triggerRelease;
+
+			this.context.transport.off("stop", this._syncedRelease);
+			this.context.transport.off("pause", this._syncedRelease);
+			this.context.transport.off("loopEnd", this._syncedRelease);
 		}
 		return this;
 	}
@@ -142,7 +157,12 @@ export abstract class Instrument<Options extends InstrumentOptions> extends Tone
 	 * // trigger "C4" for the duration of an 8th note
 	 * synth.triggerAttackRelease("C4", "8n");
 	 */
-	triggerAttackRelease(note: Frequency, duration: Time, time?: Time, velocity?: NormalRange): this {
+	triggerAttackRelease(
+		note: Frequency,
+		duration: Time,
+		time?: Time,
+		velocity?: NormalRange
+	): this {
 		const computedTime = this.toSeconds(time);
 		const computedDuration = this.toSeconds(duration);
 		this.triggerAttack(note, computedTime, velocity);
@@ -153,10 +173,14 @@ export abstract class Instrument<Options extends InstrumentOptions> extends Tone
 	/**
 	 * Start the instrument's note.
 	 * @param note the note to trigger
-	 * @param time the time to trigger the ntoe
-	 * @param velocity the velocity to trigger the note (betwee 0-1)
+	 * @param time the time to trigger the note
+	 * @param velocity the velocity to trigger the note (between 0-1)
 	 */
-	abstract triggerAttack(note: Frequency, time?: Time, velocity?: NormalRange): this;
+	abstract triggerAttack(
+		note: Frequency,
+		time?: Time,
+		velocity?: NormalRange
+	): this;
 	private _original_triggerAttack = this.triggerAttack;
 
 	/**
@@ -165,6 +189,12 @@ export abstract class Instrument<Options extends InstrumentOptions> extends Tone
 	 */
 	abstract triggerRelease(...args: any[]): this;
 	private _original_triggerRelease = this.triggerRelease;
+
+	/**
+	 * The release which is scheduled to the timeline.
+	 */
+	protected _syncedRelease = (time: number) =>
+		this._original_triggerRelease(time);
 
 	/**
 	 * clean up

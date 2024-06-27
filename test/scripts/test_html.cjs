@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { JSDOM } = require("jsdom");
+const glob = require("glob");
 const { resolve } = require("path");
 const { readFile, writeFile } = require("fs-extra");
 const { exec } = require("child_process");
 const { file } = require("tmp-promise");
-const { Converter } = require("showdown");
 
 /**
  * A promise version of exec
@@ -26,33 +26,46 @@ async function testExampleString(str) {
 	// str = str.replace("from \"tone\"", `from "${resolve(__dirname, "../../")}"`);
 	str = `
 		import * as Tone from "${resolve(__dirname, "../../")}"
+		let ui: any;
+		let drawer: any;
+		let meter: any;
+		let piano: any;
+		let fft: any;
+		let waveform: any;
+		let document: any;
+		let p5: any;
 		${str}
 	`;
 	const { path, cleanup } = await file({ postfix: ".ts" });
 	// work with file here in fd
 	await writeFile(path, str);
 	try {
-		await execPromise(`tsc  --noEmit --target es5 --lib dom,ES2015 ${path}`);
+		await execPromise(
+			`tsc  --noEmit --target es5 --lib dom,ES2015 ${path}`
+		);
 	} finally {
 		cleanup();
 	}
 }
 
+const htmlFiles = glob.sync(resolve(__dirname, "../../examples/*.html"));
+
 async function main() {
-	const readme = (await readFile(resolve(__dirname, "../../README.md"))).toString();
-	const html = new Converter().makeHtml(readme);
-	const dom = new JSDOM(html);
-	const scripts = dom.window.document.querySelectorAll("code.javascript");
-	for (let i = 0; i < scripts.length; i++) {
-		try {
-			await testExampleString(scripts[i].textContent);
-			process.stdout.write(".");
-		} catch (e) {
-			console.log("\nfailed", scripts[i].textContent);
-			console.log(e);
-			throw new Error(e);
+	for (let i = 0; i < htmlFiles.length; i++) {
+		const path = htmlFiles[i];
+		const fileAsString = (await readFile(path)).toString();
+		const dom = new JSDOM(fileAsString);
+		const scriptTag = dom.window.document.querySelector("body script");
+		if (scriptTag) {
+			try {
+				await testExampleString(scriptTag.textContent);
+				console.log("passed", path);
+			} catch (e) {
+				console.log("failed", path);
+				console.log(e);
+				throw new Error(e);
+			}
 		}
 	}
-	console.log("\n");
 }
 main();

@@ -1,4 +1,4 @@
-import { Seconds } from "../type/Units";
+import { Seconds } from "../type/Units.js";
 
 export type TickerClockSource = "worker" | "timeout" | "offline";
 
@@ -7,7 +7,6 @@ export type TickerClockSource = "worker" | "timeout" | "offline";
  * a Web Worker, or if that isn't supported, falls back to setTimeout.
  */
 export class Ticker {
-
 	/**
 	 * Either "worker" or "timeout" or "offline"
 	 */
@@ -16,7 +15,12 @@ export class Ticker {
 	/**
 	 * The update interval of the worker
 	 */
-	private _updateInterval: Seconds;
+	private _updateInterval!: Seconds;
+
+	/**
+	 * The lowest allowable interval, preferably calculated from context sampleRate
+	 */
+	private _minimumUpdateInterval: Seconds;
 
 	/**
 	 * The callback to invoke at regular intervals
@@ -33,11 +37,19 @@ export class Ticker {
 	 */
 	private _worker!: Worker;
 
-	constructor(callback: () => void, type: TickerClockSource, updateInterval: Seconds) {
-
+	constructor(
+		callback: () => void,
+		type: TickerClockSource,
+		updateInterval: Seconds,
+		contextSampleRate?: number
+	) {
 		this._callback = callback;
 		this._type = type;
-		this._updateInterval = updateInterval;
+		this._minimumUpdateInterval = Math.max(
+			128 / (contextSampleRate || 44100),
+			0.001
+		);
+		this.updateInterval = updateInterval;
 
 		// create the clock source for the first time
 		this._createClock();
@@ -47,9 +59,9 @@ export class Ticker {
 	 * Generate a web worker
 	 */
 	private _createWorker(): void {
-
-		const blob = new Blob([
-			/* javascript */`
+		const blob = new Blob(
+			[
+				/* javascript */ `
 			// the initial timeout time
 			let timeoutTime =  ${(this._updateInterval * 1000).toFixed(1)};
 			// onmessage callback
@@ -64,8 +76,10 @@ export class Ticker {
 			}
 			// call tick initially
 			tick();
-			`
-		], { type: "text/javascript" });
+			`,
+			],
+			{ type: "text/javascript" }
+		);
 		const blobUrl = URL.createObjectURL(blob);
 		const worker = new Worker(blobUrl);
 
@@ -107,8 +121,6 @@ export class Ticker {
 	private _disposeClock(): void {
 		if (this._timeout) {
 			clearTimeout(this._timeout);
-			// @ts-ignore
-			this._timeout = 0;
 		}
 		if (this._worker) {
 			this._worker.terminate();
@@ -123,9 +135,9 @@ export class Ticker {
 		return this._updateInterval;
 	}
 	set updateInterval(interval: Seconds) {
-		this._updateInterval = Math.max(interval, 128 / 44100);
+		this._updateInterval = Math.max(interval, this._minimumUpdateInterval);
 		if (this._type === "worker") {
-			this._worker.postMessage(Math.max(interval * 1000, 1));
+			this._worker?.postMessage(this._updateInterval * 1000);
 		}
 	}
 

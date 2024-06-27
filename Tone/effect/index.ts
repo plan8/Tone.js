@@ -9,7 +9,7 @@
 // export * from "./FrequencyShifter";
 // export * from "./Freeverb";
 // export * from "./JCReverb";
-export * from "./PingPongDelay";
+export * from "./PingPongDelay.js";
 // export * from "./PitchShift";
 // export * from "./Phaser";
 // export * from "./Reverb";

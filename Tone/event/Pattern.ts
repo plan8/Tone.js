@@ -1,9 +1,9 @@
-import { Loop, LoopOptions } from "./Loop";
-import { PatternGenerator, PatternName } from "./PatternGenerator";
-import { ToneEventCallback } from "./ToneEvent";
-import { optionsFromArguments } from "../core/util/Defaults";
-import { Seconds } from "../core/type/Units";
-import { noOp } from "../core/util/Interface";
+import { Loop, LoopOptions } from "./Loop.js";
+import { PatternGenerator, PatternName } from "./PatternGenerator.js";
+import { ToneEventCallback } from "./ToneEvent.js";
+import { optionsFromArguments } from "../core/util/Defaults.js";
+import { Seconds } from "../core/type/Units.js";
+import { noOp } from "../core/util/Interface.js";
 
 export interface PatternOptions<ValueType> extends LoopOptions {
 	pattern: PatternName;
@@ -13,7 +13,7 @@ export interface PatternOptions<ValueType> extends LoopOptions {
 
 /**
  * Pattern arpeggiates between the given notes
- * in a number of patterns. 
+ * in a number of patterns.
  * @example
  * const pattern = new Tone.Pattern((time, note) => {
  * 	// the order of the notes passed in depends on the pattern
@@ -21,13 +21,17 @@ export interface PatternOptions<ValueType> extends LoopOptions {
  * @category Event
  */
 export class Pattern<ValueType> extends Loop<PatternOptions<ValueType>> {
-
 	readonly name: string = "Pattern";
 
 	/**
 	 * The pattern generator function
 	 */
-	private _pattern: Iterator<ValueType>;
+	private _pattern: Iterator<number>;
+
+	/**
+	 * The current index
+	 */
+	private _index?: number;
 
 	/**
 	 * The current value
@@ -57,23 +61,29 @@ export class Pattern<ValueType> extends Loop<PatternOptions<ValueType>> {
 	constructor(
 		callback?: ToneEventCallback<ValueType>,
 		values?: ValueType[],
-		pattern?: PatternName,
+		pattern?: PatternName
 	);
 	constructor(options?: Partial<PatternOptions<ValueType>>);
 	constructor() {
-
-		super(optionsFromArguments(Pattern.getDefaults(), arguments, ["callback", "values", "pattern"]));
-		const options = optionsFromArguments(Pattern.getDefaults(), arguments, ["callback", "values", "pattern"]);
+		const options = optionsFromArguments(Pattern.getDefaults(), arguments, [
+			"callback",
+			"values",
+			"pattern",
+		]);
+		super(options);
 
 		this.callback = options.callback;
 		this._values = options.values;
-		this._pattern = PatternGenerator(options.values, options.pattern);
+		this._pattern = PatternGenerator(
+			options.values.length,
+			options.pattern
+		);
 		this._type = options.pattern;
 	}
 
 	static getDefaults(): PatternOptions<any> {
 		return Object.assign(Loop.getDefaults(), {
-			pattern: "up" as "up",
+			pattern: "up" as const,
 			values: [],
 			callback: noOp,
 		});
@@ -83,8 +93,9 @@ export class Pattern<ValueType> extends Loop<PatternOptions<ValueType>> {
 	 * Internal function called when the notes should be called
 	 */
 	protected _tick(time: Seconds): void {
-		const value = this._pattern.next() as IteratorResult<ValueType>;
-		this._value = value.value;
+		const index = this._pattern.next() as IteratorResult<ValueType>;
+		this._index = index.value;
+		this._value = this._values[index.value];
 		this.callback(time, this._value);
 	}
 
@@ -108,14 +119,20 @@ export class Pattern<ValueType> extends Loop<PatternOptions<ValueType>> {
 	}
 
 	/**
-	 * The pattern type. See Tone.CtrlPattern for the full list of patterns.
+	 * The current index of the pattern.
+	 */
+	get index(): number | undefined {
+		return this._index;
+	}
+
+	/**
+	 * The pattern type.
 	 */
 	get pattern(): PatternName {
 		return this._type;
 	}
 	set pattern(pattern) {
 		this._type = pattern;
-		this._pattern = PatternGenerator(this._values, this._type);
+		this._pattern = PatternGenerator(this._values.length, this._type);
 	}
 }
-
